@@ -1,0 +1,94 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
+
+ext.supportLibVersion = "23.2.1"
+ext.retrofitVersion = "2.0.0"
+ext.dexmakerVersion = "1.4"
+ext.testRunnerVersion= "0.4.1"
+ext.espressoVersion= "2.2.1"
+
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.nobrain.samples.adapterrolesample"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            buildConfigField "String", "FLICKER_API_KEY", "\"${flicker_key}\""
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    configurations.all {
+        resolutionStrategy {
+            force "com.android.support:support-annotations:${supportLibVersion}"
+        }
+    }
+
+    packagingOptions.excludes = [
+            'META-INF/DEPENDENCIES',
+            'META-INF/LICENSE',
+            'META-INF/LICENSE.txt',
+            'LICENSE.txt',
+            'LICENSE',
+            'META-INF/license.txt',
+            'META-INF/NOTICE',
+            'NOTICE',
+            'asm-license.txt',
+            'META-INF/NOTICE.txt',
+            'META-INF/notice.txt',
+            'META-INF/ASL2.0'
+    ]
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:cardview-v7:${supportLibVersion}"
+
+    // View DI
+    compile 'com.jakewharton:butterknife:7.0.1'
+
+    // Bean DI
+    apt "com.google.dagger:dagger-compiler:2.0"
+    compile 'com.google.dagger:dagger:2.0'
+    provided 'javax.annotation:jsr250-api:1.0'
+
+    // Network
+    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    compile "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+
+    // ImageLoader
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    //RxJava
+    compile 'io.reactivex:rxandroid:1.1.0'
+
+    androidTestCompile "com.android.support.test:runner:${testRunnerVersion}"
+    androidTestCompile "com.android.support.test:rules:${testRunnerVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
+    androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:${dexmakerVersion}"
+    androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:${dexmakerVersion}"
+    androidTestCompile 'com.jayway.awaitility:awaitility:1.7.+'
+}
