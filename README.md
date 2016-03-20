@@ -1,4 +1,4 @@
 # Android-MVP-AdapterRoleSample
 
-# LISENCE
+# LICENSE
 MIT
